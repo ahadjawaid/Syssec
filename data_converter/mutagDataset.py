@@ -1,4 +1,6 @@
 from dgl.data import DGLDataset
+import dgl
+import torch
 from processData import processData
 
 class MUTAG(DGLDataset):
@@ -10,7 +12,8 @@ class MUTAG(DGLDataset):
         graphData = getGraphData()
         self.graphs = []
         for graphID in graphData.keys():
-            self.graphs.append(graphData[graphID])
+            graph, label = graphData[graphID]
+            self.graphs.append([dgl.heterograph(graph), label])
            
     def __getitem__(self, i):
         return self.graphs[i]

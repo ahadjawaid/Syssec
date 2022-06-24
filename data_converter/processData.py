@@ -21,17 +21,18 @@ def processData():
         elements = ['C', 'N', 'O', 'F', 'I', 'Cl', 'Br']
         ntypeKeys = encodeToKey(elements)
         ntypeDict = createKeyValueDict(ntypeKeys, nodeTypeFile)
-        
+
         bonds = ['aromatic', 'single', 'double', 'triple']
         etypeKey = encodeToKey(bonds)
         edgeDict = createEdgeDict(ntypeDict, etypeKey, edgeTypeFile, edgeRelFile)
 
-        graphKey = encodeToKey(graphIndicatorFile, start=1, dtype=int)
+        graphIndicator = fileToList(graphIndicatorFile, dtype=int)
+        graphKey = encodeToKey(graphIndicator, start=1, dtype=int)
         graphDict = createGraphDict(graphKey, edgeDict)
-        graphData = createLabeledGraphDict(graphDict, graphLabelFile)
+        graphLabels = fileToList(graphLabelFile, dtype=int)
+        graphData = createLabeledGraphDict(graphDict, graphLabels)
 
-        nodeLabels = list(map(torch.tensor, graphKey.values()))
-
+        nodeLabels = createNodeLabelsDict(graphLabels, graphIndicator, ntypeDict)
 
     def getGraphData():
         return graphData
@@ -50,6 +51,10 @@ def joinDirPathToLocalPath(local_path):
 
 def encodeToKey(keys, start=0, dtype=str):
     return {encoding: dtype(key) for encoding, key in enumerate(keys, start)}
+
+
+def fileToList(file, dtype=int):
+    return [dtype(elem) for elem in file]
 
 
 def createKeyValueDict(key, labels):
@@ -104,5 +109,18 @@ def createLabeledGraphDict(graphDict, graphLabelFile):
     
     return labeledGraphDict
 
+
+def createNodeLabelsDict(graphLabels, graphIndicator, ntypeDict):
+    labels = {}
+    for i in range(len(ntypeDict)):
+        ntype = ntypeDict[i + 1]
+        graphID = graphIndicator[i] - 1
+        nodeLabel = torch.tensor([graphLabels[graphID]])
+        if ntype not in labels:
+            labels[ntype] = nodeLabel
+        else:
+            labels[ntype] = torch.cat((labels[ntype], nodeLabel))
+    
+    return labels
 
 processData()
