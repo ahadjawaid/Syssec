@@ -798,4 +798,3 @@ class HeteroGNNExplainer(nn.Module):
             edge_mask[canonical_etype] = edge_mask[canonical_etype].detach().sigmoid()
 
         return feat_mask, edge_mask
-
