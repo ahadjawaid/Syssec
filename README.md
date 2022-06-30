@@ -8,4 +8,4 @@ This repository contains the work I did for the Syssec Lab.
 - <b>training_scripts</b>: Contains the scripts I used to train models on a remote server
 
 ## GNNExplainer
-gnnexplainer.py contains the extended version of the dgl gnnexplainer with has support of hetrogenous graphs
+gnnexplainer.py contains the extended version of the dgl gnnexplainer with support for hetrogenous graphs
