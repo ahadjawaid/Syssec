@@ -22,7 +22,7 @@ def processData():
         ntypeKeys = encodeToKey(elements)
         ntypeDict = createKeyValueDict(ntypeKeys, nodeTypeFile)
 
-        bonds = ['aromatic', 'single', 'double', 'triple']
+        bonds = ['aromatic', 'single', 'doub', 'triple']
         etypeKey = encodeToKey(bonds)
         edgeDict = createEdgeDict(ntypeDict, etypeKey, edgeTypeFile, edgeRelFile)
 
@@ -104,7 +104,10 @@ def createGraphDict(graphKey, edgeDict):
 def createLabeledGraphDict(graphDict, graphLabelFile):
     labeledGraphDict = {}
     for graphID, label in enumerate(graphLabelFile, 1):
-        label = torch.tensor(int(label))
+        label = int(label)
+        if label == -1:
+            label = 0
+        label = torch.tensor(label)
         labeledGraphDict[graphID] = [graphDict[graphID], label]
     
     return labeledGraphDict
