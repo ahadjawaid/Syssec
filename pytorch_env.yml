@@ -1,0 +1,17 @@
+name: torchenv
+channels:
+  - defaults
+  - pytorch
+  - dglteam
+dependencies:
+  - numpy
+  - pandas
+  - matplotlib
+  - pip
+  - plotly
+  - scikit-learn
+  - python
+  - jupyter
+  - pytorch
+  - torchvision
+  - dgl
